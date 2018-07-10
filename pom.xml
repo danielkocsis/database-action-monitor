@@ -158,7 +158,8 @@
         <version>1.4.3</version>
         <executions>
           <execution>
-            <id>default</id>
+            <id>push-image</id>
+            <phase>deploy</phase>
             <goals>
               <goal>build</goal>
               <goal>push</goal>

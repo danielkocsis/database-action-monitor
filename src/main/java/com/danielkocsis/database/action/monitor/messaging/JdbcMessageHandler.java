@@ -23,17 +23,11 @@ public class JdbcMessageHandler {
     log.info(payload.size() + " new database records are inserted");
 
     for (Map<String, Object> columns : payload) {
-      for (String column : columns.keySet()) {
-        log.info("\t Column: " + column + " Value: " + columns.get(column));
-
-        if ("ID".equalsIgnoreCase(column)) {
-          final long id = (long) columns.get(column);
-
-          webSocketService.broadcastMessage(messageHeaders.getTimestamp(), id);
-
-          break;
-        }
-      }
+      columns.keySet().stream()
+          .filter("ID"::equalsIgnoreCase)
+          .findFirst()
+          .map(c -> (long) columns.get(c))
+          .ifPresent(c -> webSocketService.broadcastMessage(messageHeaders.getTimestamp(), c));
     }
   }
 
